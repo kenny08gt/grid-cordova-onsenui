@@ -1,0 +1,35 @@
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+
+}
+
+.cell{
+      display: inline-block;
+      text-align: center;
+      border: 1px solid #f0f1f5;
+      padding-top: 5px;
+      padding-bottom: 5px;
+
+}
+
+.categorie{
+  display: inline-block;
+  ransform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  transition-duration: 0.3s;
+  transition-property: transform;
+}
+.categorie:hover,
+.categorie:focus,
+.categorie:active{
+    transform: scale(1.1);
+}
+
+.caption {
+    display: block;
+}

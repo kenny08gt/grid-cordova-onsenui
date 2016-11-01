@@ -2,10 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="/onsenui/css/onsenui.css"/>
+    <link rel="stylesheet" href="onsenui/css/onsenui.css"/>
     <link rel="stylesheet" href="css/categories.css"/>
-    <link rel="stylesheet" href="/onsenui/css/onsen-css-components.css"/>
-    <script src="/onsenui/js/onsenui.js"></script>
+    <link rel="stylesheet" href="onsenui/css/onsen-css-components.css"/>
+    <script src="onsenui/js/onsenui.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
   </head>
 
   <body>
@@ -25,47 +26,9 @@
     -->
     </ons-toolbar>
     <div style="text-align:center;">
-      <ons-row>
-        <ons-col width="33vw" class="cell" >
-          <div class="categorie">
-            <img class="thumbnail" src="http://placekitten.com/g/120/120">
-            <span class="caption">Cutest kitty</span>
-          </div>
+      <ons-row id ="lista">
 
-        </ons-col>
-        <ons-col width="34vw" class="cell" tappable>
-          <div class="categorie">
-            <img class="thumbnail" src="http://placekitten.com/g/120/120">
-            <span class="caption">Cutest kitty</span>
-          </div>
-        </ons-col>
-        <ons-col width="33vw" class="cell" tappable>
-          <div class="categorie">
-            <img class="thumbnail" src="http://placekitten.com/g/120/120">
-            <span class="caption">Cutest kitty</span>
-          </div>
-        </ons-col>
-      </ons-row>
-      <ons-row>
-        <ons-col width="33vw" class="cell" >
-          <div class="categorie">
-            <img class="thumbnail" src="http://placekitten.com/g/120/120">
-            <span class="caption">Cutest kitty</span>
-          </div>
 
-        </ons-col>
-        <ons-col width="34vw" class="cell" tappable>
-          <div class="categorie">
-            <img class="thumbnail" src="http://placekitten.com/g/120/120">
-            <span class="caption">Cutest kitty</span>
-          </div>
-        </ons-col>
-        <ons-col width="33vw" class="cell" tappable>
-          <div class="categorie">
-            <img class="thumbnail" src="http://placekitten.com/g/120/120">
-            <span class="caption">Cutest kitty</span>
-          </div>
-        </ons-col>
       </ons-row>
 
 
@@ -74,10 +37,62 @@
 
   </ons-page>
 
+
+
   <script
     src="https://code.jquery.com/jquery-3.1.1.min.js"
     integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
-  <script src="/js/categories.js"></script>
+  <script src="js/categories.js"></script>
+  <script type="text/javascript" charset="utf-8">
+  $(document).ready(function () {
+       document.addEventListener("deviceready", onDeviceReady, true);
+  });
+
+  function onDeviceReady() {
+    alert("OK");
+    var db = window.sqlitePlugin.openDatabase({name: 'tesis.db', location: 'default'});
+      db.transaction(CrearDB, errorDB);
+  }
+
+
+  function CrearDB(tx) {
+    alert("BD");
+       tx.executeSql('CREATE TABLE IF NOT EXISTS categorias( nombre TEXT NOT NULL, categoria_padre INTEGER NOT NULL)');
+       tx.executeSql('SELECT * FROM categorias WHERE nombre=? or nombre=? ', ['Ropa','Familia'], Insert, errorDB);
+       tx.executeSql('SELECT * FROM categorias', [], ListarDB, errorDB);
+  }
+
+
+function errorDB(tx, err) {
+   alert("Error de SQL: "+err);
+}
+
+function Insert(tx, results) {
+  var len = results.rows.length;
+  if(len == 0){
+    alert("CREAR BD");
+    tx.executeSql('INSERT INTO categorias VALUES (?,?)', ['Ropa', 0]);
+    tx.executeSql('INSERT INTO categorias VALUES (?,?)', ['Familia', 0]);
+    tx.executeSql('SELECT * FROM categorias', [], ListarDB, errorDB);
+  }
+
+}
+
+function ListarDB(tx, results) {
+  alert("SHOW BD");
+  var len = results.rows.length;
+  var listado ='';
+ for (var i=0; i<len; i++){
+listado=listado.concat('<ons-col width="34vw" class="cell" tappable>'+
+'<div class="categorie">  <img class="thumbnail" src="http://placekitten.com/g/120/120">'+
+'<span class="caption">'+results.rows.item(i).nombre+'</span></div></ons-col>');
+ }
+ document.getElementById('lista').innerHTML =listado;
+}
+
+
+  </script>
+
   </body>
 </html>
