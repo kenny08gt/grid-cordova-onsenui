@@ -1,11 +1,7 @@
-var showPopover = function(target) {
-  document
-    .getElementById('popover')
-    .show(target);
-};
+$("#btn-play").on("click",function() {
+  window.location = "categories.html";
+});
 
-var hidePopover = function() {
-  document
-    .getElementById('popover')
-    .hide();
-};
+$("#btn-help").on("click",function() {
+  window.location = "help.html";
+});
