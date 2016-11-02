@@ -48,7 +48,7 @@
 
   function onDeviceReady() {
     alert("OK");
-    var db = window.sqlitePlugin.openDatabase({name: 'tesis.db', location: 'default'});
+    var db = window.sqlitePlugin.openDatabase({name: 'tesis2.db', location: 'default'});
       db.transaction(CrearDB, errorDB);
   }
 
@@ -56,7 +56,7 @@
   function CrearDB(tx) {
     alert("BD");
        tx.executeSql('CREATE TABLE IF NOT EXISTS categorias( nombre TEXT NOT NULL, categoria_padre INTEGER NOT NULL)');
-       tx.executeSql('SELECT * FROM categorias WHERE nombre=? or nombre=? ', ['Ropa','Familia'], Insert, errorDB);
+       tx.executeSql('SELECT * FROM categorias WHERE nombre=? or nombre=? or nombre=? or nombre=? ', ['Ropa','Familia','Familia2','Familia3'], Insert, errorDB);
        tx.executeSql('SELECT * FROM categorias', [], ListarDB, errorDB);
   }
 
@@ -71,6 +71,8 @@ function Insert(tx, results) {
     alert("CREAR BD");
     tx.executeSql('INSERT INTO categorias VALUES (?,?)', ['Ropa', 0]);
     tx.executeSql('INSERT INTO categorias VALUES (?,?)', ['Familia', 0]);
+    tx.executeSql('INSERT INTO categorias VALUES (?,?)', ['Familia2', 0]);
+    tx.executeSql('INSERT INTO categorias VALUES (?,?)', ['Familia3', 0]);
     tx.executeSql('SELECT * FROM categorias', [], ListarDB, errorDB);
   }
 
@@ -80,12 +82,12 @@ function ListarDB(tx, results) {
   alert("SHOW BD");
   var len = results.rows.length;
   var listado ='';
- for (var i=0; i<len; i++){
-listado=listado.concat('<ons-col width="34vw" class="cell" tappable>'+
-'<div class="categorie">  <img class="thumbnail" src="http://placekitten.com/g/120/120">'+
-'<span class="caption">'+results.rows.item(i).nombre+'</span></div></ons-col>');
- }
- document.getElementById('lista').innerHTML =listado;
+   for (var i=0; i<len; i++){
+    listado=listado.concat('<ons-col width="33%" class="cell" tappable>'+
+    '<div class="categorie">  <img class="thumbnail" src="http://placekitten.com/g/120/120">'+
+    '<span class="caption">'+results.rows.item(i).nombre+'</span></div></ons-col>');
+   }
+     document.getElementById('lista').innerHTML =listado;
 }
 
 

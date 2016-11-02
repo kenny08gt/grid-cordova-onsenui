@@ -1,8 +1,9 @@
-body{
+body,ons-page{
   max-height: 100vh;
 }
 .main-menu{
   text-align: center;
+  padding-bottom: 35vh;
 }
 .main-menu h1{
   max-height: 5vh;
@@ -21,12 +22,15 @@ body{
   margin-top: 5vh;
   margin: auto;
 }
+.button-main{
+
+}
 
 .footer{
   text-align: center;
-  position: fixed;
-   bottom: 0;
-   width: 100%;
+  vertical-align : bottom;
+  padding-top: 60vh;
+  width: 100%;
 }
 
 /*
@@ -67,5 +71,46 @@ floating
 	}
 	100% {
 		-webkit-transform: translateY(0%);
+	}
+}
+
+.pulse{
+	animation-name: pulse;
+	-webkit-animation-name: pulse;
+
+	animation-duration: 1.5s;
+	-webkit-animation-duration: 1.5s;
+
+	animation-iteration-count: infinite;
+	-webkit-animation-iteration-count: infinite;
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(0.9);
+		opacity: 0.7;
+	}
+	50% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	100% {
+		transform: scale(0.9);
+		opacity: 0.7;
+	}
+}
+
+@-webkit-keyframes pulse {
+	0% {
+		-webkit-transform: scale(0.95);
+		opacity: 0.7;
+	}
+	50% {
+		-webkit-transform: scale(1);
+		opacity: 1;
+	}
+	100% {
+		-webkit-transform: scale(0.95);
+		opacity: 0.7;
 	}
 }

@@ -2,10 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="/onsenui/css/onsenui.css"/>
-    <link rel="stylesheet" href="css/index.css"/>
-    <link rel="stylesheet" href="/onsenui/css/onsen-css-components.css"/>
+    <link rel="stylesheet" href="onsenui/css/onsenui.css"/>
 
+    <link rel="stylesheet" href="onsenui/css/onsen-css-components.css"/>
+    <link rel="stylesheet" href="css/loose.css"/>
   </head>
 
   <body>
@@ -18,24 +18,39 @@
       <div class="center">Game Over</div>
     </ons-toolbar>
     <div class="body">
+      <h1 class="pulse">Game Over</h1>
+      <div id="points">
+        <ons-row>
 
+          <ons-col style="top:20vh;"><strong>Punteo</strong><br>50</ons-col>
+          <ons-col >
+            <div style="height: 30%;">
+              <img style=" max-width: 100%;max-height: 100%;" src="img/triste.png" alt="" class="tossing">
+            </div>
+          </ons-col>
+        </ons-row>
+      </div>
+
+      <div id="bestP">
+        <ons-row>
+          <ons-col width="100%">
+            <h4>Mejor puntuación</h4>
+          </ons-col>
+        </ons-row>
+        <ons-row>
+          <ons-col width="100%">
+          500
+          </ons-col>
+        </ons-row>
+      </div>
     </div>
-    <table style="text-align: center;">
-      <tr>
-        <td><span id="punteo">50</span></td>
-        <td><img src="img/triste.png" alt=""></td>
-      </tr>
-      <tr>
-        Mejor puntuacion
-        <p>200</p>
-      </tr>
-    </table>
-    <div class="right">
-      <ons-back-button id="btn-again">Jugar de nuevo</ons-back-button>
+    <div class="footer">
+      <ons-button id="btn-again">Jugar de nuevo</ons-button>
     </div>
   </ons-page>
-  <script src="/onsenui/js/onsenui.js"></script>
+  <script src="onsenui/js/onsenui.js"></script>
   <script src="js/jquery311.js"></script>
-  <script src="/js/help.js"></script>
+  <script src="js/loose.js"></script>
+  <script type="text/javascript" src="cordova.js"></script>
   </body>
 </html>
