@@ -17,13 +17,6 @@
         <ons-back-button id="btn-back">Regresar</ons-back-button>
       </div>
       <div class="center">Elige una categoría</div>
-      <!--
-      <div class="right">
-        <ons-toolbar-button>
-          <ons-icon icon="md-menu"></ons-icon>
-        </ons-toolbar-button>
-      </div>
-    -->
     </ons-toolbar>
     <div style="text-align:center;">
       <ons-row id ="lista">
@@ -31,32 +24,64 @@
 
       </ons-row>
 
-
     </div>
-
 
   </ons-page>
 
 
 
-  <script src="js/jquery311.js"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
   <script src="js/categories.js"></script>
   <script type="text/javascript" charset="utf-8">
+    var palabras ='';
+    var imagenes ='';
+    var param;
+function funcion(value){
+    param = value;
+    //alert(param);
+    var db = window.sqlitePlugin.openDatabase({name: "pruebas3.db", location: 'default'});
+    db.transaction(select, errorDB);
+
+}
+
   $(document).ready(function () {
        document.addEventListener("deviceready", onDeviceReady, true);
   });
 
   function onDeviceReady() {
-    alert("OK");
-    var db = window.sqlitePlugin.openDatabase({name: 'tesis2.db', location: 'default'});
-      db.transaction(CrearDB, errorDB);
+        var db = window.sqlitePlugin.openDatabase({name: "pruebas3.db", location: 'default'});
+        db.transaction(CrearDB, errorDB);
   }
 
 
+  function select(tx) {
+       tx.executeSql('SELECT * FROM palabras WHERE categoria_padre=? ', [param], success, errorDB);
+
+  }
+  function success(tx, results){
+
+    var len = results.rows.length;
+   for (var i=0; i<len; i++){
+     palabras += results.rows.item(i).nombre;
+     imagenes += results.rows.item(i).imagen;
+     if(len>0){
+       palabras+='&';
+       imagenes+='&';
+   }
+   }
+  //  alert(palabras);
+    window.localStorage.setItem('palabras', palabras);
+    window.localStorage.setItem('imagenes', imagenes);
+    window.location.replace("juego.html");
+  }
+
   function CrearDB(tx) {
-    alert("BD");
-       tx.executeSql('CREATE TABLE IF NOT EXISTS categorias( nombre TEXT NOT NULL, categoria_padre INTEGER NOT NULL)');
-       tx.executeSql('SELECT * FROM categorias WHERE nombre=? or nombre=? or nombre=? or nombre=? ', ['Ropa','Familia','Familia2','Familia3'], Insert, errorDB);
+       tx.executeSql('CREATE TABLE IF NOT EXISTS categorias(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, categoria_padre INTEGER NOT NULL, imagen TEXT NOT NULL)');
+       tx.executeSql('CREATE TABLE IF NOT EXISTS palabras(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, categoria_padre INTEGER NOT NULL, imagen TEXT NOT NULL)');
+       tx.executeSql('SELECT * FROM categorias WHERE nombre=? or nombre=? ', ['Ropa','Familia'], Insert, errorDB);
        tx.executeSql('SELECT * FROM categorias', [], ListarDB, errorDB);
   }
 
@@ -68,26 +93,40 @@ function errorDB(tx, err) {
 function Insert(tx, results) {
   var len = results.rows.length;
   if(len == 0){
-    alert("CREAR BD");
-    tx.executeSql('INSERT INTO categorias VALUES (?,?)', ['Ropa', 0]);
-    tx.executeSql('INSERT INTO categorias VALUES (?,?)', ['Familia', 0]);
-    tx.executeSql('INSERT INTO categorias VALUES (?,?)', ['Familia2', 0]);
-    tx.executeSql('INSERT INTO categorias VALUES (?,?)', ['Familia3', 0]);
-    tx.executeSql('SELECT * FROM categorias', [], ListarDB, errorDB);
+    //alert("CREAR BD");
+    tx.executeSql('INSERT INTO categorias(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Ropa', 0,'img/ropa.png']);
+    tx.executeSql('INSERT INTO categorias (nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Familia', 0,'img/familia.jpg']);
+    tx.executeSql('SELECT * FROM categorias', [], InsertarPalabras, errorDB);
   }
 
 }
 
+
+function InsertarPalabras(tx, results) {
+  var id_ropa = results.rows.item(0).id;
+  var id_familia = results.rows.item(1).id;
+  //alert("id en insert"+id_familia);
+  tx.executeSql('INSERT INTO palabras(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Sudadero', id_ropa,'img/ropa.png']);
+  tx.executeSql('INSERT INTO palabras(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Pantalon', id_ropa,'img/pantalon.png']);
+  tx.executeSql('INSERT INTO palabras(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Camisa', id_ropa,'img/camisa.png']);
+  tx.executeSql('INSERT INTO palabras(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Calcetines', id_ropa,'img/calcetines.png']);
+  tx.executeSql('INSERT INTO palabras(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Padre', id_familia,'img/padre.jpg']);
+  tx.executeSql('INSERT INTO palabras(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Madre', id_familia,'img/madre.jpg']);
+  tx.executeSql('INSERT INTO palabras(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Abuelo', id_familia,'img/abuelo.png']);
+  tx.executeSql('INSERT INTO palabras(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Abuela', id_familia,'img/abuela.png']);
+  tx.executeSql('INSERT INTO palabras(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Bebé', id_familia,'img/bebe.png']);
+  tx.executeSql('SELECT * FROM categorias', [], ListarDB, errorDB);
+}
+
 function ListarDB(tx, results) {
-  alert("SHOW BD");
   var len = results.rows.length;
   var listado ='';
-   for (var i=0; i<len; i++){
-    listado=listado.concat('<ons-col width="33%" class="cell" tappable>'+
-    '<div class="categorie">  <img class="thumbnail" src="http://placekitten.com/g/120/120">'+
-    '<span class="caption">'+results.rows.item(i).nombre+'</span></div></ons-col>');
-   }
-     document.getElementById('lista').innerHTML =listado;
+ for (var i=0; i<len; i++){
+listado=listado.concat('<ons-col width="34vw" class="cell" tappable>'+
+'<div class="categorie"  onclick="funcion(\''+results.rows.item(i).id+'\')">  <img class="thumbnail" src="'+results.rows.item(i).imagen+'">'+
+'<span class="caption">'+results.rows.item(i).nombre+'</span></div></ons-col>');
+ }
+    document.getElementById('lista').innerHTML =listado;
 }
 
 

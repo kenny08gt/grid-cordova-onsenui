@@ -1601,9 +1601,9 @@ ons-range[disabled] .range {
   border: none;
   background-color: #25a6d9;
   color: #fff;
-  font-size: 17px;
+  font-size: 37px;
   font-weight: 500;
-  line-height: 36px;
+  line-height: 56px;
   padding: 4px 12px;
   width: 100%;
   text-align: center;
@@ -1792,7 +1792,7 @@ ons-range[disabled] .range {
   -o-transition: box-shadow 0.2s ease;
   transition: box-shadow 0.2s ease;
   text-align: center;
-  font-size: 14px;
+  font-size: 34px;
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
   -o-transform: translate3d(0, 0, 0);
@@ -5099,6 +5099,8 @@ input[type="search"].search-input::-webkit-search-cancel-button {
       </div>
     </div>
 */
+
+
 .alert-dialog {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;

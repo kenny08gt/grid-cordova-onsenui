@@ -22,7 +22,7 @@
       <div id="points">
         <ons-row>
 
-          <ons-col style="top:20vh;"><strong>Punteo</strong><br>50</ons-col>
+          <ons-col><button class="button button--material--flat">Puntuacion</button> <div id=punteo></div></ons-col>
           <ons-col >
             <div style="height: 30%;">
               <img style=" max-width: 100%;max-height: 100%;" src="img/triste.png" alt="" class="tossing">
@@ -45,12 +45,29 @@
       </div>
     </div>
     <div class="footer">
-      <ons-button id="btn-again">Jugar de nuevo</ons-button>
+      <ons-button id="btn-again" onclick="jugar()">Jugar de nuevo</ons-button>
     </div>
   </ons-page>
   <script src="onsenui/js/onsenui.js"></script>
   <script src="js/jquery311.js"></script>
   <script src="js/loose.js"></script>
   <script type="text/javascript" src="cordova.js"></script>
+  <script type="text/javascript" charset="utf-8">
+  var puntuacion  = window.localStorage.getItem('puntuacion');
+  $(document).ready(function () {
+       document.addEventListener("deviceready", onDeviceReady, true);
+  });
+
+  function onDeviceReady() {
+        //var db = window.sqlitePlugin.openDatabase({name: "pruebas.db", location: 'default'});
+        //db.transaction(CrearDB, errorDB);
+        var punteo  = window.localStorage.getItem('puntuacion');
+        document.getElementById('punteo').innerHTML = '<button class="button button--material--flat" disabled>'+punteo+'</button>';
+
+  }
+  function jugar(){
+    window.location.replace("juego.html");
+  }
+   </script>
   </body>
 </html>

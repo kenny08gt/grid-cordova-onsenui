@@ -31,31 +31,38 @@
 
       </ons-row>
 
-
     </div>
-
 
   </ons-page>
 
 
 
-  <script src="js/jquery311.js"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
   <script src="js/categories.js"></script>
   <script type="text/javascript" charset="utf-8">
+function funcion(param){
+  alert(param);
+  window.localStorage.setItem('param', param);
+  window.location.replace("juego.html");
+}
+
   $(document).ready(function () {
        document.addEventListener("deviceready", onDeviceReady, true);
   });
 
   function onDeviceReady() {
-    alert("OK");
-    var db = window.sqlitePlugin.openDatabase({name: 'tesis.db', location: 'default'});
-      db.transaction(CrearDB, errorDB);
+    var db = window.sqlitePlugin.openDatabase({name: "pruebas.db", location: 2, createFromLocation: 1});
+    db.transaction(CrearDB, errorDB);
   }
 
 
   function CrearDB(tx) {
     alert("BD");
-       tx.executeSql('CREATE TABLE IF NOT EXISTS categorias( nombre TEXT NOT NULL, categoria_padre INTEGER NOT NULL)');
+       tx.executeSql('CREATE TABLE IF NOT EXISTS categorias(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, categoria_padre INTEGER NOT NULL, imagen TEXT NOT NULL)');
+       tx.executeSql('CREATE TABLE IF NOT EXISTS palabras(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT NOT NULL, categoria_padre INTEGER NOT NULL, imagen TEXT NOT NULL)');
        tx.executeSql('SELECT * FROM categorias WHERE nombre=? or nombre=? ', ['Ropa','Familia'], Insert, errorDB);
        tx.executeSql('SELECT * FROM categorias', [], ListarDB, errorDB);
   }
@@ -69,11 +76,22 @@ function Insert(tx, results) {
   var len = results.rows.length;
   if(len == 0){
     alert("CREAR BD");
-    tx.executeSql('INSERT INTO categorias VALUES (?,?)', ['Ropa', 0]);
-    tx.executeSql('INSERT INTO categorias VALUES (?,?)', ['Familia', 0]);
-    tx.executeSql('SELECT * FROM categorias', [], ListarDB, errorDB);
+    tx.executeSql('INSERT INTO categorias(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Ropa', 0,'img/ropa.jpg']);
+    tx.executeSql('INSERT INTO categorias (nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Familia', 0,'img/familia.jpg']);
+    tx.executeSql('SELECT * FROM categorias', [], InsertarPalabras, errorDB);
   }
 
+}
+
+
+function InsertarPalabras(tx, results) {
+  var id_ropa = results.rows.item(0).id;
+  var id_familia = results.rows.item(1).id;
+  tx.executeSql('INSERT INTO palabras(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Sudadero', id_ropa,'img/ropa.jpg']);
+  tx.executeSql('INSERT INTO palabras(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Pantalon', id_ropa,'img/pantalon.jpg']);
+  tx.executeSql('INSERT INTO palabras(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Camisa', id_ropa,'img/camisa.png']);
+  tx.executeSql('INSERT INTO palabras(nombre, categoria_padre, imagen) VALUES (?,?,?)', ['Calcetines', id_ropa,'img/calcetines.jpg']);
+  tx.executeSql('SELECT * FROM categorias', [], ListarDB, errorDB);
 }
 
 function ListarDB(tx, results) {
@@ -82,10 +100,10 @@ function ListarDB(tx, results) {
   var listado ='';
  for (var i=0; i<len; i++){
 listado=listado.concat('<ons-col width="34vw" class="cell" tappable>'+
-'<div class="categorie">  <img class="thumbnail" src="http://placekitten.com/g/120/120">'+
+'<div class="categorie"  onclick="funcion(\''+results.rows.item(i).id+'\')">  <img class="thumbnail" src="'+results.rows.item(i).imagen+'">'+
 '<span class="caption">'+results.rows.item(i).nombre+'</span></div></ons-col>');
  }
- document.getElementById('lista').innerHTML =listado;
+  document.getElementById('lista').innerHTML =listado;
 }
 
 
